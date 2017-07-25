@@ -1,11 +1,12 @@
-package com.bryansharp.gradle.hibeaver
+package com.cms.cmxm.core
 
 import com.android.annotations.NonNull
 import com.android.annotations.Nullable
 import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
-import com.cms.cmxm.SimpleModifyClassUtil
 import com.bryansharp.gradle.hibeaver.utils.*
+import com.cms.cmxm.MethodCell
+import com.cms.cmxm.SimpleModifyClassUtil
 import groovy.io.FileType
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
@@ -13,14 +14,14 @@ import org.apache.commons.io.IOUtils
 
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
+
+
 /**
- * Created by bryansharp(bsp0911932@163.com) on 2016/5/7.
- *
- * @author bryansharp
- *         Project: FirstGradle
- *         introduction:
+ * Author: jinghao fkinh26@gmail.com
+ * Date: 2017/7/24
  */
-public class InjectTransform extends Transform {
+
+public class CMXMInjectTransform extends Transform {
 
     @Override
     String getName() {
@@ -54,12 +55,11 @@ public class InjectTransform extends Transform {
             @NonNull Collection<TransformInput> referencedInputs,
             @Nullable TransformOutputProvider outputProvider,
             boolean isIncremental) throws IOException, TransformException, InterruptedException {
-        Log.info "==============hiBeaver transform enter=============="
-//        String flavorAndBuildType = context.name.split("For")[1]
-//        Log.info("flavorAndBuildType ${flavorAndBuildType}")
-        Map<String, Object> modifyMatchMaps = Util.getConfig().modifyMatchMaps;
-        List<String> lifeCircles = Util.getConfig().lifeCircles;
-        Util.initTargetClasses(modifyMatchMaps, lifeCircles)
+        Log.info "==============cmxm transform begin=============="
+
+        List<String> lifeCircles = Util.getConfig().lifeCircles; // init life circles
+        Map<String, MethodCell> monitors = Util.getConfig().monitors; // init monitors
+        Util.initTargetClasses(lifeCircles, monitors)
         /**
          * 获取所有依赖的classPaths,仅做备用
          */
@@ -176,20 +176,37 @@ public class InjectTransform extends Transform {
             byte[] sourceClassBytes = IOUtils.toByteArray(new FileInputStream(classFile));
             String key = Util.shouldModifyClass(className)
             if (key != null) {
+                byte[] modifiedClassBytes;
                 //old logic
                 Map<String, Object> modifyMatchMaps = Util.getConfig().modifyMatchMaps
-                byte[] modifiedClassBytes;
                 if(modifyMatchMaps.get(key) != null){
                     Log.logEach("hibeaver old map logic");
                     modifiedClassBytes = ModifyClassUtil.modifyClasses(className, sourceClassBytes, modifyMatchMaps.get(key));
                 }
-                // do life circle insert
-//                List<String> circles = Util.getConfig().lifeCircles
-//                if(circles.contains(className)) {
-//                    Log.logEach("life circle logic");
-//                    modifiedClassBytes = SimpleModifyClassUtil.modifyClasses(className, sourceClassBytes)
-//                }
 
+                // do life circle insert
+                List<String> circles = Util.getConfig().lifeCircles
+                if(circles.contains(className)) {
+                    Log.logEach("life circle logic");
+                    if(modifiedClassBytes){
+                        modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCircleClasses(className, modifiedClassBytes)
+                    } else {
+                        modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCircleClasses(className, sourceClassBytes)
+                    }
+
+                }
+
+                // do monitors insert
+                Map<String, List<MethodCell>> monitors = Util.getConfig().monitors
+                if(monitors.containsKey(className)){
+                    Log.logEach("monitors logic");
+                    if(modifiedClassBytes){
+                        modifiedClassBytes = SimpleModifyClassUtil.modifySimpleMonitorClasses(className, modifiedClassBytes, monitors.get(className))
+                    } else {
+                        modifiedClassBytes = SimpleModifyClassUtil.modifySimpleMonitorClasses(className, sourceClassBytes, monitors.get(className))
+                    }
+
+                }
 
                 if (modifiedClassBytes) {
                     modified = new File(tempDir, className.replace('.', '') + '.class')

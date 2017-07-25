@@ -1,4 +1,4 @@
-package com.bryansharp.gradle.hibeaver
+package com.cms.cmxm.core
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
@@ -10,11 +10,11 @@ import com.bryansharp.gradle.hibeaver.utils.Util
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class HiBeaverPluginImpl implements Plugin<Project> {
+class CMXMPluginImpl implements Plugin<Project> {
     @Override
     void apply(Project project) {
-        println ":applied HiBeaver"
-        project.extensions.create('xmconfig', HiBeaverParams)
+        println ":applied CMXM"
+        project.extensions.create('xmconfig', XMConfig)
         Util.setProject(project)
         try {
             if(Class.forName("com.android.build.gradle.BaseExtension")){
@@ -42,17 +42,11 @@ class HiBeaverPluginImpl implements Plugin<Project> {
             if (taskMap != null && taskMap.size() > 0) {
                 generateTasks(project, taskMap);
             }
-            if (project.xmconfig.watchTimeConsume) {
-                Log.info "watchTimeConsume enabled"
-                project.gradle.addListener(new TimeListener())
-            } else {
-                Log.info "watchTimeConsume disabled"
-            }
         }
     }
 
     def static registerTransform(BaseExtension android) {
-        InjectTransform transform = new InjectTransform()
+        CMXMInjectTransform transform = new CMXMInjectTransform()
         android.registerTransform(transform)
     }
 
@@ -60,7 +54,7 @@ class HiBeaverPluginImpl implements Plugin<Project> {
         if (!project.buildDir.exists()) {
             project.buildDir.mkdirs()
         }
-        File hiBeaverDir = new File(project.buildDir, "HiBeaver")
+        File hiBeaverDir = new File(project.buildDir, "CMXM")
         if (!hiBeaverDir.exists()) {
             hiBeaverDir.mkdir()
         }
@@ -73,7 +67,7 @@ class HiBeaverPluginImpl implements Plugin<Project> {
     }
 
     def static generateTasks(Project project, Map<String, Map<String, Object>> taskMap) {
-        project.task("hibeaverModifyFiles") << {
+        project.task("cmxmModifyFiles") << {
             ModifyFiles.modify(taskMap)
         }
     }

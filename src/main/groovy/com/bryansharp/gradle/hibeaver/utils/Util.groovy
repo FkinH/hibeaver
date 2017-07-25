@@ -2,6 +2,8 @@ package com.bryansharp.gradle.hibeaver.utils
 
 import com.android.build.gradle.BaseExtension
 import com.bryansharp.gradle.hibeaver.HiBeaverParams
+import com.cms.cmxm.MethodCell
+import com.cms.cmxm.core.XMConfig
 import org.gradle.api.Project
 
 import java.util.regex.Pattern
@@ -30,8 +32,8 @@ public class Util {
         return project.extensions.getByType(BaseExtension)
     }
 
-    public static HiBeaverParams getHiBeaver() {
-        return project.hiBeaver
+    public static XMConfig getConfig() {
+        return project.xmconfig
     }
 
     public static void initTargetClasses(Map<String, Object> modifyMatchMaps) {
@@ -49,6 +51,48 @@ public class Util {
                     }
                     targetClasses.put(entry.getKey(), type)
                 }
+            }
+        }
+    }
+
+    public static void initTargetClasses(Map<String, Object> modifyMatchMaps, List<String> lifeCircles) {
+        targetClasses.clear()
+        if (modifyMatchMaps != null) {
+            def set = modifyMatchMaps.entrySet();
+            for (Map.Entry<String, Object> entry : set) {
+                def value = entry.getValue()
+                if (value) {
+                    int type;
+                    if (value instanceof Map) {
+                        type = typeString2Int(value.get(Const.KEY_CLASSMATCHTYPE));
+                    } else {
+                        type = getMatchTypeByValue(entry.getKey());
+                    }
+                    targetClasses.put(entry.getKey(), type)
+                }
+            }
+        }
+        if(lifeCircles != null && !lifeCircles.isEmpty()){
+            for(String s:lifeCircles){
+                //todo s null ?
+                targetClasses.put(s, getMatchTypeByValue(s))
+            }
+        }
+    }
+
+    public static void initTargetClasses(List<String> lifeCircles, Map<String, MethodCell> monitors) {
+        targetClasses.clear()
+        if(lifeCircles != null && !lifeCircles.isEmpty()){
+            for(String s:lifeCircles){
+                //todo s null ?
+                targetClasses.put(s, getMatchTypeByValue(s))
+            }
+        }
+        if(monitors != null){
+            def set = monitors.entrySet();
+            for (Map.Entry<String, Object> entry : set) {
+                int type = getMatchTypeByValue(entry.getKey());
+                targetClasses.put(entry.getKey(), type)
             }
         }
     }
@@ -246,7 +290,7 @@ public class Util {
     }
 
     public static String shouldModifyClass(String className) {
-        if (getHiBeaver().enableModify) {
+        if (getConfig().enable) {
             def set = targetClasses.entrySet();
             for (Map.Entry<String, Integer> entry : set) {
                 def mt = entry.getValue();

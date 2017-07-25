@@ -1,12 +1,11 @@
-package com.bryansharp.gradle.hibeaver
+package com.cms.cmxm.core
 
 import com.cms.cmxm.MethodCell
 
-public class HiBeaverParams {
-    boolean enableModify = true
-    boolean watchTimeConsume = false
+public class XMConfig {
+    boolean enable = true
     boolean keepQuiet = false
-    boolean showHelp = true
+    boolean showHelp = false
     Map<String, Object> modifyMatchMaps = [:]
     Map<String, Map<String, Object>> modifyTasks = [:]
     List<String> lifeCircles = [];
