@@ -15,9 +15,8 @@ import org.objectweb.asm.*
 
 public class SimpleModifyClassUtil {
 
-    public static byte[] modifyLifeCycleClasses(String className, byte[] srcByteCode) {
-        LifeCycleInstrumentation ins = new LifeCycleInstrumentation(className);
-        return getModifiedBytes(className, srcByteCode, ins)
+    public static byte[] modifyLifeCycleClasses(String className, byte[] srcByteCode, LifeCycleInstrumentation life) {
+        return getModifiedBytes(className, srcByteCode, life)
 //        byte[] classBytesCode = null;
 //        try {
 //            Log.info("====start modifying ${className}====");

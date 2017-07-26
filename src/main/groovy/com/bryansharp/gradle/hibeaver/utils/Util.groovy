@@ -3,6 +3,7 @@ package com.bryansharp.gradle.hibeaver.utils
 import com.android.build.gradle.BaseExtension
 import com.cms.cmxm.MethodCell
 import com.cms.cmxm.core.XMConfig
+import com.cms.cmxm.ins.LifeCycleInstrumentation
 import com.cms.cmxm.ins.MonitorInstrumentation
 import org.gradle.api.Project
 
@@ -79,12 +80,11 @@ public class Util {
         }
     }
 
-    public static void initTargetClasses(List<String> lifecycle, Map<String, MethodCell> instrumentation, List<MonitorInstrumentation> monitor) {
+    public static void initTargetClasses(List<LifeCycleInstrumentation> lifecycle, Map<String, MethodCell> instrumentation, List<MonitorInstrumentation> monitor) {
         targetClasses.clear()
         if(lifecycle != null && !lifecycle.isEmpty()){
-            for(String s:lifecycle){
-                //todo s null ?
-                targetClasses.put(s, getMatchTypeByValue(s))
+            for(LifeCycleInstrumentation s:lifecycle){
+                targetClasses.put(s.clz, getMatchTypeByValue(s.clz))
             }
         }
         if(instrumentation != null){

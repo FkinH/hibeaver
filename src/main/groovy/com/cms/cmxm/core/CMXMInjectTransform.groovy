@@ -7,6 +7,7 @@ import com.android.build.gradle.internal.pipeline.TransformManager
 import com.bryansharp.gradle.hibeaver.utils.*
 import com.cms.cmxm.MethodCell
 import com.cms.cmxm.SimpleModifyClassUtil
+import com.cms.cmxm.ins.LifeCycleInstrumentation
 import com.cms.cmxm.ins.MonitorInstrumentation
 import groovy.io.FileType
 import org.apache.commons.codec.digest.DigestUtils
@@ -58,7 +59,7 @@ public class CMXMInjectTransform extends Transform {
             boolean isIncremental) throws IOException, TransformException, InterruptedException {
         Log.info "==============cmxm transform begin=============="
 
-        List<String> lifecycle = Util.getConfig().lifecycle; // init life circles
+        List<LifeCycleInstrumentation> lifecycle = Util.getConfig().lifecycle; // init life circles
         Map<String, MethodCell> instrumentation = Util.getConfig().instrumentation; // init instrumentation
         List<MonitorInstrumentation> monitors = Util.getConfig().monitors; // init one method
         Util.initTargetClasses(lifecycle, instrumentation, monitors)
@@ -187,14 +188,20 @@ public class CMXMInjectTransform extends Transform {
                 }
 
                 // do life circle insert
-                List<String> lifecycle = Util.getConfig().lifecycle
+                List<LifeCycleInstrumentation> lifecycle = Util.getConfig().lifecycle
+                lifecycle.each {
+                    l ->
+                        if(l.clz == className){
+                            if(modifiedClassBytes){
+                                modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCycleClasses(className, modifiedClassBytes, l)
+                            } else {
+                                modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCycleClasses(className, sourceClassBytes, l)
+                            }
+                        }
+                }
                 if(lifecycle.contains(className)) {
                     Log.logEach("life circle logic");
-                    if(modifiedClassBytes){
-                        modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCycleClasses(className, modifiedClassBytes)
-                    } else {
-                        modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCycleClasses(className, sourceClassBytes)
-                    }
+
                 }
 
                 // do one way

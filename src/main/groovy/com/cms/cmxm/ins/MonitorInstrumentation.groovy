@@ -48,7 +48,7 @@ class MonitorInstrumentation extends BaseXMInstrumentation{
                 MethodVisitor adapter = new SimpleAdapter(methodVisitor) {
                     @Override
                     def void onStart() {
-                        if(type == 0){
+                        if(type == 1){
 //                            String class, String method, String methodDesc, int addMthStartOrEnd, String id, int monitorType
                             methodVisitor.visitLdcInsn(clz)
                             methodVisitor.visitLdcInsn(name)
@@ -62,7 +62,7 @@ class MonitorInstrumentation extends BaseXMInstrumentation{
 
                     @Override
                     def void onEnd() {
-                        if(type == 1){
+                        if(type == 2){
 //                            String class, String method, String methodDesc, int addMthStartOrEnd, String id, int monitorType, int endIdx, boolean last
                             methodVisitor.visitLdcInsn(clz)
                             methodVisitor.visitLdcInsn(name)
