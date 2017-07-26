@@ -1,13 +1,12 @@
 package com.bryansharp.gradle.hibeaver.utils
 
 import com.android.build.gradle.BaseExtension
-import com.bryansharp.gradle.hibeaver.HiBeaverParams
 import com.cms.cmxm.MethodCell
 import com.cms.cmxm.core.XMConfig
+import com.cms.cmxm.ins.MonitorInstrumentation
 import org.gradle.api.Project
 
 import java.util.regex.Pattern
-
 /**
  * Created by bryansharp(bsp0911932@163.com) on 2016/5/10.
  *
@@ -80,19 +79,24 @@ public class Util {
         }
     }
 
-    public static void initTargetClasses(List<String> lifeCircles, Map<String, MethodCell> monitors) {
+    public static void initTargetClasses(List<String> lifecycle, Map<String, MethodCell> instrumentation, List<MonitorInstrumentation> monitor) {
         targetClasses.clear()
-        if(lifeCircles != null && !lifeCircles.isEmpty()){
-            for(String s:lifeCircles){
+        if(lifecycle != null && !lifecycle.isEmpty()){
+            for(String s:lifecycle){
                 //todo s null ?
                 targetClasses.put(s, getMatchTypeByValue(s))
             }
         }
-        if(monitors != null){
-            def set = monitors.entrySet();
+        if(instrumentation != null){
+            def set = instrumentation.entrySet();
             for (Map.Entry<String, Object> entry : set) {
-                int type = getMatchTypeByValue(entry.getKey());
+                int type = getMatchTypeByValue(entry.getKey())
                 targetClasses.put(entry.getKey(), type)
+            }
+        }
+        if(monitor != null && !monitor.isEmpty()){
+            for(MonitorInstrumentation o:monitor){
+                targetClasses.put(o.clz, getMatchTypeByValue(o.clz))
             }
         }
     }

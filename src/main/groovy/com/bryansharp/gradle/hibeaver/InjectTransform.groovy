@@ -4,7 +4,6 @@ import com.android.annotations.NonNull
 import com.android.annotations.Nullable
 import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
-import com.cms.cmxm.SimpleModifyClassUtil
 import com.bryansharp.gradle.hibeaver.utils.*
 import groovy.io.FileType
 import org.apache.commons.codec.digest.DigestUtils
@@ -58,7 +57,7 @@ public class InjectTransform extends Transform {
 //        String flavorAndBuildType = context.name.split("For")[1]
 //        Log.info("flavorAndBuildType ${flavorAndBuildType}")
         Map<String, Object> modifyMatchMaps = Util.getConfig().modifyMatchMaps;
-        List<String> lifeCircles = Util.getConfig().lifeCircles;
+        List<String> lifeCircles = Util.getConfig().lifecycle;
         Util.initTargetClasses(modifyMatchMaps, lifeCircles)
         /**
          * 获取所有依赖的classPaths,仅做备用
@@ -184,7 +183,7 @@ public class InjectTransform extends Transform {
                     modifiedClassBytes = ModifyClassUtil.modifyClasses(className, sourceClassBytes, modifyMatchMaps.get(key));
                 }
                 // do life circle insert
-//                List<String> circles = Util.getConfig().lifeCircles
+//                List<String> circles = Util.getConfig().lifecycle
 //                if(circles.contains(className)) {
 //                    Log.logEach("life circle logic");
 //                    modifiedClassBytes = SimpleModifyClassUtil.modifyClasses(className, sourceClassBytes)

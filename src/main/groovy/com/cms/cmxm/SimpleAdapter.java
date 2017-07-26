@@ -15,8 +15,8 @@ public abstract class SimpleAdapter extends MethodLogAdapter {
         super(mv);
     }
 
-    abstract void onStart();
-    abstract void onEnd();
+    public abstract void onStart();
+    public abstract void onEnd();
 
     @Override
     public void visitCode() {

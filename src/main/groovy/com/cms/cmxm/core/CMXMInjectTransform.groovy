@@ -7,6 +7,7 @@ import com.android.build.gradle.internal.pipeline.TransformManager
 import com.bryansharp.gradle.hibeaver.utils.*
 import com.cms.cmxm.MethodCell
 import com.cms.cmxm.SimpleModifyClassUtil
+import com.cms.cmxm.ins.MonitorInstrumentation
 import groovy.io.FileType
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
@@ -57,9 +58,10 @@ public class CMXMInjectTransform extends Transform {
             boolean isIncremental) throws IOException, TransformException, InterruptedException {
         Log.info "==============cmxm transform begin=============="
 
-        List<String> lifeCircles = Util.getConfig().lifeCircles; // init life circles
-        Map<String, MethodCell> monitors = Util.getConfig().monitors; // init monitors
-        Util.initTargetClasses(lifeCircles, monitors)
+        List<String> lifecycle = Util.getConfig().lifecycle; // init life circles
+        Map<String, MethodCell> instrumentation = Util.getConfig().instrumentation; // init instrumentation
+        List<MonitorInstrumentation> monitors = Util.getConfig().monitors; // init one method
+        Util.initTargetClasses(lifecycle, instrumentation, monitors)
         /**
          * 获取所有依赖的classPaths,仅做备用
          */
@@ -185,27 +187,38 @@ public class CMXMInjectTransform extends Transform {
                 }
 
                 // do life circle insert
-                List<String> circles = Util.getConfig().lifeCircles
-                if(circles.contains(className)) {
+                List<String> lifecycle = Util.getConfig().lifecycle
+                if(lifecycle.contains(className)) {
                     Log.logEach("life circle logic");
                     if(modifiedClassBytes){
-                        modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCircleClasses(className, modifiedClassBytes)
+                        modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCycleClasses(className, modifiedClassBytes)
                     } else {
-                        modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCircleClasses(className, sourceClassBytes)
+                        modifiedClassBytes = SimpleModifyClassUtil.modifyLifeCycleClasses(className, sourceClassBytes)
                     }
-
                 }
 
-                // do monitors insert
-                Map<String, List<MethodCell>> monitors = Util.getConfig().monitors
-                if(monitors.containsKey(className)){
-                    Log.logEach("monitors logic");
-                    if(modifiedClassBytes){
-                        modifiedClassBytes = SimpleModifyClassUtil.modifySimpleMonitorClasses(className, modifiedClassBytes, monitors.get(className))
-                    } else {
-                        modifiedClassBytes = SimpleModifyClassUtil.modifySimpleMonitorClasses(className, sourceClassBytes, monitors.get(className))
-                    }
+                // do one way
+                List<MonitorInstrumentation> monitors = Util.getConfig().monitors
+                monitors.each {
+                    m ->
+                        if(m.clz == className){
+                            if(modifiedClassBytes){
+                                modifiedClassBytes = SimpleModifyClassUtil.modifyMonitorClasses(className, modifiedClassBytes, m)
+                            } else {
+                                modifiedClassBytes = SimpleModifyClassUtil.modifyMonitorClasses(className, sourceClassBytes, m)
+                            }
+                        }
+                }
 
+                // do instrumentation insert
+                Map<String, List<MethodCell>> instrumentation = Util.getConfig().instrumentation
+                if(instrumentation.containsKey(className)){
+                    Log.logEach("instrumentation logic");
+                    if(modifiedClassBytes){
+                        modifiedClassBytes = SimpleModifyClassUtil.modifyInstrumentationClasses(className, modifiedClassBytes, instrumentation.get(className))
+                    } else {
+                        modifiedClassBytes = SimpleModifyClassUtil.modifyInstrumentationClasses(className, sourceClassBytes, instrumentation.get(className))
+                    }
                 }
 
                 if (modifiedClassBytes) {

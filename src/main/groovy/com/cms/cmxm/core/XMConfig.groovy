@@ -1,6 +1,7 @@
 package com.cms.cmxm.core
 
 import com.cms.cmxm.MethodCell
+import com.cms.cmxm.ins.MonitorInstrumentation
 
 public class XMConfig {
     boolean enable = true
@@ -8,6 +9,7 @@ public class XMConfig {
     boolean showHelp = false
     Map<String, Object> modifyMatchMaps = [:]
     Map<String, Map<String, Object>> modifyTasks = [:]
-    List<String> lifeCircles = [];
-    Map<String, List<MethodCell>> monitors = [:]
+    List<String> lifecycle = [];
+    List<MonitorInstrumentation> monitors = [];
+    Map<String, List<MethodCell>> instrumentation = [:]
 }
