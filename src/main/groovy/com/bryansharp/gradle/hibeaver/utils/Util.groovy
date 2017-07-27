@@ -5,6 +5,7 @@ import com.cms.cmxm.MethodCell
 import com.cms.cmxm.core.XMConfig
 import com.cms.cmxm.ins.LifeCycleInstrumentation
 import com.cms.cmxm.ins.MonitorInstrumentation
+import com.cms.cmxm.ins.ReceiverInstrumentation
 import org.gradle.api.Project
 
 import java.util.regex.Pattern
@@ -80,7 +81,7 @@ public class Util {
         }
     }
 
-    public static void initTargetClasses(List<LifeCycleInstrumentation> lifecycle, Map<String, MethodCell> instrumentation, List<MonitorInstrumentation> monitor) {
+    public static void initTargetClasses(List<LifeCycleInstrumentation> lifecycle, Map<String, MethodCell> instrumentation, List<MonitorInstrumentation> monitor, List<ReceiverInstrumentation> receiver) {
         targetClasses.clear()
         if(lifecycle != null && !lifecycle.isEmpty()){
             for(LifeCycleInstrumentation s:lifecycle){
@@ -97,6 +98,11 @@ public class Util {
         if(monitor != null && !monitor.isEmpty()){
             for(MonitorInstrumentation o:monitor){
                 targetClasses.put(o.clz, getMatchTypeByValue(o.clz))
+            }
+        }
+        if(receiver != null && !receiver.isEmpty()){
+            for(ReceiverInstrumentation r:receiver){
+                targetClasses.put(r.clz, getMatchTypeByValue(r.clz))
             }
         }
     }

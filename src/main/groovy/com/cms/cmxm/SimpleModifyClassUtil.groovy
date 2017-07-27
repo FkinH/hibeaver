@@ -3,9 +3,11 @@ package com.cms.cmxm
 import com.bryansharp.gradle.hibeaver.utils.Log
 import com.bryansharp.gradle.hibeaver.utils.MethodLogAdapter
 import com.bryansharp.gradle.hibeaver.utils.Util
+import com.cms.cmxm.ins.BaseXMInstrumentation
 import com.cms.cmxm.ins.LifeCycleInstrumentation
 import com.cms.cmxm.ins.MonitorInstrumentation
-import com.cms.cmxm.ins.BaseXMInstrumentation
+import com.cms.cmxm.ins.ReceiverInstrumentation
+import jdk.internal.org.objectweb.asm.ClassReader
 import org.objectweb.asm.*
 
 /**
@@ -56,6 +58,26 @@ public class SimpleModifyClassUtil {
 
     public static byte[] modifyMonitorClasses(String className, byte[] srcByteCode, MonitorInstrumentation monitor){
         BaseXMInstrumentation ins = new BaseXMInstrumentation(className, monitor.list);
+        return getModifiedBytes(className, srcByteCode, ins)
+//        byte[] classBytesCode = null;
+//        try {
+//            Log.info("====start modifying ${className}====");
+//            classBytesCode = modifyClass(srcByteCode, ins);
+//            Log.info("====revisit modified ${className}====");
+//            onlyVisitClassMethod(classBytesCode, ins);
+//            Log.info("====finish modifying ${className}====");
+//            return classBytesCode;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        if (classBytesCode == null) {
+//            classBytesCode = srcByteCode;
+//        }
+//        return classBytesCode;
+    }
+
+    public static byte[] modifyReceiverClasses(String className, byte[] srcByteCode, ReceiverInstrumentation receiver){
+        BaseXMInstrumentation ins = new BaseXMInstrumentation(className, receiver.cells);
         return getModifiedBytes(className, srcByteCode, ins)
 //        byte[] classBytesCode = null;
 //        try {

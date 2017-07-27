@@ -19,6 +19,14 @@ class LifeCycleInstrumentation extends BaseXMInstrumentation {
 
     int type; // 0:application, 1:activity
 
+    public LifeCycleInstrumentation(String clz){
+        this(null, clz, 0)
+    }
+
+    public LifeCycleInstrumentation(String section, String clz){
+        this(section, clz, 1)
+    }
+
     public LifeCycleInstrumentation(String section, String clz, int type) {
         super();
         this.clz = clz
@@ -92,7 +100,7 @@ class LifeCycleInstrumentation extends BaseXMInstrumentation {
 
                         return adapter;
                 });
-                MethodCell resume = new MethodCell("test", '()V', 0, {
+                MethodCell resume = new MethodCell("onResume", '()V', 0, {
                     ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
                         MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
                         MethodVisitor adapter = new SimpleAdapter(methodVisitor) {

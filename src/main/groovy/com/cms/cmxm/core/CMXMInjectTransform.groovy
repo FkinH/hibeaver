@@ -9,6 +9,7 @@ import com.cms.cmxm.MethodCell
 import com.cms.cmxm.SimpleModifyClassUtil
 import com.cms.cmxm.ins.LifeCycleInstrumentation
 import com.cms.cmxm.ins.MonitorInstrumentation
+import com.cms.cmxm.ins.ReceiverInstrumentation
 import groovy.io.FileType
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
@@ -62,7 +63,8 @@ public class CMXMInjectTransform extends Transform {
         List<LifeCycleInstrumentation> lifecycle = Util.getConfig().lifecycle; // init life circles
         Map<String, MethodCell> instrumentation = Util.getConfig().instrumentation; // init instrumentation
         List<MonitorInstrumentation> monitors = Util.getConfig().monitors; // init one method
-        Util.initTargetClasses(lifecycle, instrumentation, monitors)
+        List<ReceiverInstrumentation> receivers = Util.getConfig().receivers // init receiver
+        Util.initTargetClasses(lifecycle, instrumentation, monitors, receivers)
         /**
          * 获取所有依赖的classPaths,仅做备用
          */
@@ -217,6 +219,19 @@ public class CMXMInjectTransform extends Transform {
                         }
                 }
 
+                // do receiver
+                List<ReceiverInstrumentation> receivers = Util.getConfig().receivers
+                receivers.each {
+                    r ->
+                        if(r.clz == className){
+                            if(modifiedClassBytes){
+                                modifiedClassBytes = SimpleModifyClassUtil.modifyReceiverClasses(className, modifiedClassBytes, r)
+                            } else {
+                                modifiedClassBytes = SimpleModifyClassUtil.modifyReceiverClasses(className, sourceClassBytes, r)
+                            }
+                        }
+                }
+
                 // do instrumentation insert
                 Map<String, List<MethodCell>> instrumentation = Util.getConfig().instrumentation
                 if(instrumentation.containsKey(className)){
@@ -227,6 +242,8 @@ public class CMXMInjectTransform extends Transform {
                         modifiedClassBytes = SimpleModifyClassUtil.modifyInstrumentationClasses(className, sourceClassBytes, instrumentation.get(className))
                     }
                 }
+
+
 
                 if (modifiedClassBytes) {
                     modified = new File(tempDir, className.replace('.', '') + '.class')
