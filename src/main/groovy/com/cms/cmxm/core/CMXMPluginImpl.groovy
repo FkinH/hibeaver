@@ -54,15 +54,15 @@ class CMXMPluginImpl implements Plugin<Project> {
         if (!project.buildDir.exists()) {
             project.buildDir.mkdirs()
         }
-        File hiBeaverDir = new File(project.buildDir, "CMXM")
-        if (!hiBeaverDir.exists()) {
-            hiBeaverDir.mkdir()
+        File modifiedDir = new File(project.buildDir, "cmxm")
+        if (!modifiedDir.exists()) {
+            modifiedDir.mkdir()
         }
-        File tempDir = new File(hiBeaverDir, "temp")
+        File tempDir = new File(modifiedDir, "temp")
         if (!tempDir.exists()) {
             tempDir.mkdir()
         }
-        DataHelper.ext.hiBeaverDir = hiBeaverDir
+        DataHelper.ext.hiBeaverDir = modifiedDir
         DataHelper.ext.hiBeaverTempDir = tempDir
     }
 

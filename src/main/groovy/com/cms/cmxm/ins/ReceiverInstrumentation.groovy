@@ -1,5 +1,6 @@
 package com.cms.cmxm.ins
 
+import com.cms.cmxm.Agent
 import com.cms.cmxm.MethodCell
 import com.cms.cmxm.SimpleAdapter
 import org.objectweb.asm.ClassVisitor
@@ -28,14 +29,14 @@ class ReceiverInstrumentation extends BaseXMInstrumentation{
                     def void onStart() {
                         methodVisitor.visitVarInsn(Opcodes.ALOAD, 1);
                         methodVisitor.visitVarInsn(Opcodes.ALOAD, 2);
-                        methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "hookXM", "(Ljava/lang/Object;Ljava/lang/Object;)V");
+                        methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_RCV_CLASS, "onReceive", "(Ljava/lang/String;ILandroid/content/Context;Landroid/content/Intent;)V");
                     }
 
                     @Override
                     def void onEnd() {
                         methodVisitor.visitVarInsn(Opcodes.ALOAD, 1);
                         methodVisitor.visitVarInsn(Opcodes.ALOAD, 2);
-                        methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "hookXM", "(Ljava/lang/Object;Ljava/lang/Object;)V");
+                        methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_RCV_CLASS, "onReceive", "(Ljava/lang/String;ILandroid/content/Context;Landroid/content/Intent;)V");
                     }
                 }
 

@@ -7,8 +7,14 @@ import com.cms.cmxm.ins.BaseXMInstrumentation
 import com.cms.cmxm.ins.LifeCycleInstrumentation
 import com.cms.cmxm.ins.MonitorInstrumentation
 import com.cms.cmxm.ins.ReceiverInstrumentation
-import jdk.internal.org.objectweb.asm.ClassReader
-import org.objectweb.asm.*
+import org.objectweb.asm.AnnotationVisitor
+import org.objectweb.asm.Attribute
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.FieldVisitor
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
 
 /**
  * Author: jinghao fkinh26@gmail.com

@@ -1,5 +1,6 @@
 package com.cms.cmxm.ins
 
+import com.cms.cmxm.Agent
 import com.cms.cmxm.MethodCell
 import com.cms.cmxm.SimpleAdapter
 import org.objectweb.asm.ClassVisitor
@@ -41,13 +42,13 @@ class LifeCycleInstrumentation extends BaseXMInstrumentation {
                             @Override
                             def void onStart() {
                                 methodVisitor.visitLdcInsn(1);
-                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onAttachBaseContext", "(I)V");
+                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_APP_CLASS, "onAttachBaseContext", "(I)V");
                             }
 
                             @Override
                             def void onEnd() {
                                 methodVisitor.visitLdcInsn(2);
-                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onAttachBaseContext", "(I)V");
+                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_APP_CLASS, "onAttachBaseContext", "(I)V");
                             }
                         }
 
@@ -61,13 +62,13 @@ class LifeCycleInstrumentation extends BaseXMInstrumentation {
                             @Override
                             def void onStart() {
                                 methodVisitor.visitLdcInsn(1);
-                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onAppOnCreate", "(I)V");
+                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_APP_CLASS, "onAppOnCreate", "(I)V");
                             }
 
                             @Override
                             def void onEnd() {
                                 methodVisitor.visitLdcInsn(2);
-                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onAppOnCreate", "(I)V");
+                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_APP_CLASS, "onAppOnCreate", "(I)V");
                             }
                         }
 
@@ -86,7 +87,7 @@ class LifeCycleInstrumentation extends BaseXMInstrumentation {
                                 methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
                                 methodVisitor.visitLdcInsn(section);
                                 methodVisitor.visitLdcInsn(1);
-                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onCreate", "(Ljava/lang/Object;Ljava/lang/String;I)V");
+                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_ACT_CLASS, "onCreate", "(Ljava/lang/Object;Ljava/lang/String;I)V");
                             }
 
                             @Override
@@ -94,7 +95,7 @@ class LifeCycleInstrumentation extends BaseXMInstrumentation {
                                 methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
                                 methodVisitor.visitLdcInsn(section);
                                 methodVisitor.visitLdcInsn(2);
-                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onCreate", "(Ljava/lang/Object;Ljava/lang/String;I)V");
+                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_ACT_CLASS, "onCreate", "(Ljava/lang/Object;Ljava/lang/String;I)V");
                             }
                         }
 
@@ -109,7 +110,7 @@ class LifeCycleInstrumentation extends BaseXMInstrumentation {
                                 methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
                                 methodVisitor.visitLdcInsn(section);
                                 methodVisitor.visitLdcInsn(1);
-                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onResume", "(Ljava/lang/Object;Ljava/lang/String;I)V");
+                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_ACT_CLASS, "onResume", "(Ljava/lang/Object;Ljava/lang/String;I)V");
                             }
 
                             @Override
@@ -117,7 +118,7 @@ class LifeCycleInstrumentation extends BaseXMInstrumentation {
                                 methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
                                 methodVisitor.visitLdcInsn(section);
                                 methodVisitor.visitLdcInsn(2);
-                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onShowEnd", "(Ljava/lang/Object;Ljava/lang/String;I)V");
+                                methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_ACT_CLASS, "onShowEnd", "(Ljava/lang/Object;Ljava/lang/String;I)V");
                             }
                         }
                         return adapter;

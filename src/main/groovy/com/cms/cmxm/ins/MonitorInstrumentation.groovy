@@ -1,5 +1,6 @@
 package com.cms.cmxm.ins
 
+import com.cms.cmxm.Agent
 import com.cms.cmxm.MethodCell
 import com.cms.cmxm.SimpleAdapter
 import org.objectweb.asm.ClassVisitor
@@ -56,7 +57,7 @@ class MonitorInstrumentation extends BaseXMInstrumentation{
                             methodVisitor.visitLdcInsn(type)
                             methodVisitor.visitLdcInsn(section)
                             methodVisitor.visitLdcInsn(monitor)
-                            methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onGradleDefineMonitorStart", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;I)V");
+                            methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_MONITOR_CLASS, "onGradleDefineMonitorStart", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;I)V");
                         }
                     }
 
@@ -72,7 +73,7 @@ class MonitorInstrumentation extends BaseXMInstrumentation{
                             methodVisitor.visitLdcInsn(monitor)
                             methodVisitor.visitLdcInsn(endIndex)
                             methodVisitor.visitLdcInsn(last)
-                            methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "bruce/com/testhibeaver/Agent", "onGradleDefineMonitorEnd", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;IIZ)V");
+                            methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, Agent.AGENT_MONITOR_CLASS, "onGradleDefineMonitorEnd", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;IIZ)V");
                         }
                     }
                 }

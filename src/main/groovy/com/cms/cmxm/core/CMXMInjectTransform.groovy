@@ -28,7 +28,7 @@ public class CMXMInjectTransform extends Transform {
 
     @Override
     String getName() {
-        return "HiBeaver"
+        return "cmxm"
     }
 
     @Override
@@ -242,8 +242,6 @@ public class CMXMInjectTransform extends Transform {
                         modifiedClassBytes = SimpleModifyClassUtil.modifyInstrumentationClasses(className, sourceClassBytes, instrumentation.get(className))
                     }
                 }
-
-
 
                 if (modifiedClassBytes) {
                     modified = new File(tempDir, className.replace('.', '') + '.class')
