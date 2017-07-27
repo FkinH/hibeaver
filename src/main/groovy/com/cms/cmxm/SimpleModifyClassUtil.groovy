@@ -19,81 +19,21 @@ public class SimpleModifyClassUtil {
 
     public static byte[] modifyLifeCycleClasses(String className, byte[] srcByteCode, LifeCycleInstrumentation life) {
         return getModifiedBytes(className, srcByteCode, life)
-//        byte[] classBytesCode = null;
-//        try {
-//            Log.info("====start modifying ${className}====");
-//            classBytesCode = modifyClass(srcByteCode, ins);
-//            Log.info("====revisit modified ${className}====");
-//            onlyVisitClassMethod(classBytesCode, ins);
-//            Log.info("====finish modifying ${className}====");
-//            return classBytesCode;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        if (classBytesCode == null) {
-//            classBytesCode = srcByteCode;
-//        }
-//        return classBytesCode;
     }
 
     public static byte[] modifyInstrumentationClasses(String className, byte[] srcByteCode, List<MethodCell> cells){
         BaseXMInstrumentation ins = new BaseXMInstrumentation(className, cells);
         return getModifiedBytes(className, srcByteCode, ins)
-//        byte[] classBytesCode = null;
-//        try {
-//            Log.info("====start modifying ${className}====");
-//            classBytesCode = modifyClass(srcByteCode, ins);
-//            Log.info("====revisit modified ${className}====");
-//            onlyVisitClassMethod(classBytesCode, ins);
-//            Log.info("====finish modifying ${className}====");
-//            return classBytesCode;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        if (classBytesCode == null) {
-//            classBytesCode = srcByteCode;
-//        }
-//        return classBytesCode;
     }
 
     public static byte[] modifyMonitorClasses(String className, byte[] srcByteCode, MonitorInstrumentation monitor){
         BaseXMInstrumentation ins = new BaseXMInstrumentation(className, monitor.list);
         return getModifiedBytes(className, srcByteCode, ins)
-//        byte[] classBytesCode = null;
-//        try {
-//            Log.info("====start modifying ${className}====");
-//            classBytesCode = modifyClass(srcByteCode, ins);
-//            Log.info("====revisit modified ${className}====");
-//            onlyVisitClassMethod(classBytesCode, ins);
-//            Log.info("====finish modifying ${className}====");
-//            return classBytesCode;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        if (classBytesCode == null) {
-//            classBytesCode = srcByteCode;
-//        }
-//        return classBytesCode;
     }
 
     public static byte[] modifyReceiverClasses(String className, byte[] srcByteCode, ReceiverInstrumentation receiver){
         BaseXMInstrumentation ins = new BaseXMInstrumentation(className, receiver.cells);
         return getModifiedBytes(className, srcByteCode, ins)
-//        byte[] classBytesCode = null;
-//        try {
-//            Log.info("====start modifying ${className}====");
-//            classBytesCode = modifyClass(srcByteCode, ins);
-//            Log.info("====revisit modified ${className}====");
-//            onlyVisitClassMethod(classBytesCode, ins);
-//            Log.info("====finish modifying ${className}====");
-//            return classBytesCode;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        if (classBytesCode == null) {
-//            classBytesCode = srcByteCode;
-//        }
-//        return classBytesCode;
     }
 
     private static byte[] getModifiedBytes(String className, byte[] srcByteCode, BaseXMInstrumentation ins){
